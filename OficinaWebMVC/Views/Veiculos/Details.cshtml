@@ -1,4 +1,8 @@
-﻿@model OficinaWebMVC.Database.Entities.Veiculo
+﻿
+
+@model OficinaWebMVC.Models.ListaVeiculos
+
+
 
 @{
     ViewData["Title"] = "Details";
@@ -28,9 +32,31 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CodChassi)
         </dd>
+
+        @if (Model.ModeloMoto is not null)
+        {
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ModeloMoto)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ModeloMoto)
+            </dd>
+        }
+        
+        @if (Model.ModeloCarro is not null)
+        {
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ModeloCarro)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ModeloCarro)
+            </dd>
+        }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.IdVeiculo">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
