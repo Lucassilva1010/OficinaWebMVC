@@ -1,10 +1,11 @@
-﻿@model OficinaWebMVC.Database.Entities.Veiculo
+﻿@using OficinaWebMVC.Enums;
+@model OficinaWebMVC.Models.ListaVeiculos
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Veiculo</h4>
 <hr />
@@ -27,7 +28,25 @@
                 <input asp-for="CodChassi" class="form-control" />
                 <span asp-validation-for="CodChassi" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
+            @if (Model.ModeloCarro is not null)
+            {
+                <div class="form-group">
+                    <label asp-for="ModeloCarro" class="control-label"></label>
+
+                    <select asp-items="@Html.GetEnumSelectList<ModeloCarro>()" asp-for="ModeloCarro"></select>
+                </div>
+            }
+            else
+            {
+
+                <div class="form-group">
+                    <label asp-for="ModeloMoto" class="control-label"></label>
+
+                    <select asp-items="@Html.GetEnumSelectList<ModeloMoto>()" asp-for="ModeloMoto"></select>
+                </div>
+            }
+          
+            <input type="hidden" asp-for="IdVeiculo" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -36,7 +55,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar a Lista</a>
 </div>
 
 @section Scripts {

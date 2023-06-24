@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using OficinaWebMVC.Database.Contexto;
 using OficinaWebMVC.Database.Entities;
+using OficinaWebMVC.Enums;
 using OficinaWebMVC.Models;
 
 namespace OficinaWebMVC.Controllers
@@ -141,13 +142,20 @@ namespace OficinaWebMVC.Controllers
             {
                 return NotFound();
             }
+            
 
             var veiculo = await _context.Veiculo.FindAsync(id);
+        
             if (veiculo == null)
             {
                 return NotFound();
             }
-            return View(veiculo);
+
+            var listaVeiculo = new ListaVeiculos { Ano = veiculo.Ano, CodChassi = veiculo.CodChassi, IdVeiculo = veiculo.Id,
+                Placa = veiculo.Placa, ModeloCarro = (veiculo as Carro)?.ModeloCarro,  ModeloMoto = (veiculo  as Moto)?.ModeloMoto};
+
+
+            return View(listaVeiculo);
         }
 
         // POST: Veiculos/Edit/5
@@ -155,9 +163,9 @@ namespace OficinaWebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Placa,Ano,CodChassi,Id")] Veiculo veiculo)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Placa,Ano,CodChassi,ModeloCarro,ModeloMoto,IdVeiculo")] ListaVeiculos listaVeiculo)
         {
-            if (id != veiculo.Id)
+            if (id != listaVeiculo.IdVeiculo)
             {
                 return NotFound();
             }
@@ -166,12 +174,29 @@ namespace OficinaWebMVC.Controllers
             {
                 try
                 {
+                    var veiculo  = await _context.Veiculo.FirstOrDefaultAsync(i=> i.Id == listaVeiculo.IdVeiculo);
+                    if (veiculo == null)
+                    {
+                        return NotFound();
+                    }
+
+                    veiculo.Placa = listaVeiculo.Placa;
+                    veiculo.Ano = listaVeiculo.Ano;
+                    veiculo.CodChassi = listaVeiculo.CodChassi;
+                    if (veiculo is Carro carro)
+                    {
+                        carro.ModeloCarro = (ModeloCarro)listaVeiculo.ModeloCarro!;
+                    }
+                    if (veiculo is Moto moto)
+                    {
+                        moto.ModeloMoto = (ModeloMoto)listaVeiculo.ModeloMoto!;
+                    }
                     _context.Update(veiculo);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VeiculoExists(veiculo.Id))
+                    if (!VeiculoExists(listaVeiculo.IdVeiculo))
                     {
                         return NotFound();
                     }
@@ -182,7 +207,7 @@ namespace OficinaWebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(veiculo);
+            return View(listaVeiculo);
         }
 
         // GET: Veiculos/Delete/5
@@ -199,8 +224,18 @@ namespace OficinaWebMVC.Controllers
             {
                 return NotFound();
             }
+            var listaVeiculo = new ListaVeiculos
+            {
+                Ano = veiculo.Ano,
+                CodChassi = veiculo.CodChassi,
+                IdVeiculo = veiculo.Id,
+                Placa = veiculo.Placa,
+                ModeloCarro = (veiculo as Carro)?.ModeloCarro,
+                ModeloMoto = (veiculo as Moto)?.ModeloMoto
+            };
 
-            return View(veiculo);
+
+            return View(listaVeiculo);
         }
 
         // POST: Veiculos/Delete/5
