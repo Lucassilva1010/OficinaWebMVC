@@ -11,8 +11,7 @@ namespace OficinaWebMVC.Models
         public int Ano { get; set; }
         public string CodChassi { get; set; }
         public PorteCarro? PorteCarro { get; set; }
-        public PorteMoto? PorteMoto { get; set; }
-        [NaoValidar]
+        public PorteMoto? PorteMoto { get; set; }    
         public ClienteModel? Cliente { get; set; }
         public string  Modelo { get; set; }
         public string Marca { get; set; }
