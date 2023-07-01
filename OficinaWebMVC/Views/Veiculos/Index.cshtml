@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OficinaWebMVC.Database.Entities.Veiculo>
+﻿@model IEnumerable<OficinaWebMVC.Models.ListaVeiculos>
 
 @{
     ViewData["Title"] = "Veiculos";
@@ -7,7 +7,11 @@
 <h1>Veiculos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateCarro">Cadastrar Carro</a>
+</p>
+
+<p>
+    <a asp-action="CreateMoto">Cadastrar Moto</a>
 </p>
 <table class="table">
     <thead>
@@ -21,27 +25,66 @@
             <th>
                 @Html.DisplayNameFor(model => model.CodChassi)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Marca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modelo)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model=> model.PorteCarro )
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=> model.PorteMoto )
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=> model.Cliente.Nome )
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=> model.Cliente.Email )
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Placa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ano)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodChassi)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Placa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ano)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CodChassi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Marca)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Modelo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorteCarro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorteMoto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdVeiculo">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdVeiculo">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdVeiculo">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
