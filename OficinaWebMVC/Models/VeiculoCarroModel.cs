@@ -9,7 +9,9 @@ namespace OficinaWebMVC.Models
         public string Placa { get; set; }
         public int Ano { get; set; }
         public string CodChassi { get; set; }
-        public ModeloCarro ModeloCarro { get; set; }
+        public PorteCarro PorteCarro { get; set; }
+        public string Marca { get; set; }
+        public string Modelo { get; set; }
         public Guid IdCliente { get; set; }
 
     }

@@ -23,9 +23,10 @@ namespace OficinaWebMVC.Controllers
         }
 
         // GET: Veiculos
+
         public async Task<IActionResult> Index()
         {
-            var veiculos = await _context.Veiculo.ToListAsync();
+            var veiculos = await _context.Veiculo.Include(a=>a.Cliente).ToListAsync();
            
             List<ListaVeiculos> listaVeiculos = new List<ListaVeiculos>();
             
@@ -33,11 +34,11 @@ namespace OficinaWebMVC.Controllers
             {
                 if (item is Moto moto)
                 {
-                    listaVeiculos.Add(new ListaVeiculos { Ano = moto.Ano, CodChassi = moto.CodChassi, IdVeiculo = moto.Id, Placa = moto.Placa, ModeloMoto = moto.ModeloMoto });
+                    listaVeiculos.Add(new ListaVeiculos { Ano = moto.Ano, CodChassi = moto.CodChassi, IdVeiculo = moto.Id, Placa = moto.Placa, PorteMoto = moto.PorteMoto, Cliente = new ClienteModel { Nome = moto.Cliente.Nome, Email = moto.Cliente.Email}, Marca = moto.Marca, Modelo = moto.Modelo });
                 }
                 if (item is Carro carro)
                 {
-                    listaVeiculos.Add(new ListaVeiculos { Ano = carro.Ano, CodChassi = carro.CodChassi, IdVeiculo = carro.Id, Placa = carro.Placa, ModeloCarro = carro.ModeloCarro });
+                    listaVeiculos.Add(new ListaVeiculos { Ano = carro.Ano, CodChassi = carro.CodChassi, IdVeiculo = carro.Id, Placa = carro.Placa, PorteCarro = carro.PorteCarro, Cliente = new ClienteModel {Nome = carro.Cliente.Nome, Email = carro.Cliente.Email }, Marca = carro.Marca, Modelo = carro.Modelo });
                 }
             }
 
@@ -63,7 +64,22 @@ namespace OficinaWebMVC.Controllers
                 return NotFound();
             }
 
-            return View(veiculo);
+
+            var listaVeiculo = new ListaVeiculos
+            {
+                Ano = veiculo.Ano,
+                CodChassi = veiculo.CodChassi,
+                IdVeiculo = veiculo.Id,
+                Placa = veiculo.Placa,
+                PorteCarro = (veiculo as Carro)?.PorteCarro,
+                PorteMoto = (veiculo as Moto)?.PorteMoto,
+                Marca = veiculo.Marca,
+                Modelo = veiculo.Modelo
+            };
+
+
+
+            return View(listaVeiculo);
         }
 
         // GET: Veiculos/Create
@@ -92,7 +108,7 @@ namespace OficinaWebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCarro([Bind("Placa,Ano,CodChassi,ModeloCarro,IdCliente")]VeiculoCarroModel veiculoCarroModel )
+        public async Task<IActionResult> CreateCarro([Bind("Placa,Ano,CodChassi,PorteCarro,Marca,Modelo,IdCliente")]VeiculoCarroModel veiculoCarroModel )
         {
             if (ModelState.IsValid)
             {
@@ -102,9 +118,11 @@ namespace OficinaWebMVC.Controllers
                 veiculo.Cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.Id == veiculoCarroModel.IdCliente);
                    
                 veiculo.Placa = veiculoCarroModel.Placa;
-                veiculo.ModeloCarro = veiculoCarroModel.ModeloCarro;
+                veiculo.PorteCarro = veiculoCarroModel.PorteCarro;
                 veiculo.CodChassi = veiculoCarroModel.CodChassi;
                 veiculo.Ano = veiculoCarroModel.Ano;
+                veiculo.Marca = veiculoCarroModel.Marca;
+                veiculo.Modelo = veiculoCarroModel.Modelo;
 
                 _context.Add(veiculo);
                 await _context.SaveChangesAsync();
@@ -115,7 +133,7 @@ namespace OficinaWebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateMoto([Bind("Placa,Ano,CodChassi,ModeloMoto,IdCliente")] VeiculoMotoModel veiculoMotoModel)
+        public async Task<IActionResult> CreateMoto([Bind("Placa,Ano,CodChassi,PorteMoto,Marca, Modelo,IdCliente")] VeiculoMotoModel veiculoMotoModel)
         {
             if (ModelState.IsValid)
             {
@@ -124,9 +142,11 @@ namespace OficinaWebMVC.Controllers
                 veiculoMoto.Id = Guid.NewGuid();
                 veiculoMoto.Cliente = await _context.Clientes.FirstOrDefaultAsync(c=> c.Id == veiculoMotoModel.IdCliente);
                 veiculoMoto.Placa = veiculoMotoModel.Placa;
-                veiculoMoto.ModeloMoto = veiculoMotoModel.ModeloMoto;
+                veiculoMoto.PorteMoto = veiculoMotoModel.PorteMoto;
                 veiculoMoto.CodChassi = veiculoMotoModel.CodChassi;
                 veiculoMoto.Ano = veiculoMotoModel.Ano;
+                veiculoMoto.Marca = veiculoMotoModel.Marca;
+                veiculoMoto.Modelo = veiculoMotoModel.Modelo;
                
                 _context.Add(veiculoMoto);
                 await _context.SaveChangesAsync();
@@ -152,7 +172,7 @@ namespace OficinaWebMVC.Controllers
             }
 
             var listaVeiculo = new ListaVeiculos { Ano = veiculo.Ano, CodChassi = veiculo.CodChassi, IdVeiculo = veiculo.Id,
-                Placa = veiculo.Placa, ModeloCarro = (veiculo as Carro)?.ModeloCarro,  ModeloMoto = (veiculo  as Moto)?.ModeloMoto};
+                Placa = veiculo.Placa, PorteCarro = (veiculo as Carro)?.PorteCarro,  PorteMoto = (veiculo  as Moto)?.PorteMoto, Marca = veiculo.Marca, Modelo = veiculo.Modelo};
 
 
             return View(listaVeiculo);
@@ -163,12 +183,15 @@ namespace OficinaWebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Placa,Ano,CodChassi,ModeloCarro,ModeloMoto,IdVeiculo")] ListaVeiculos listaVeiculo)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Placa,Ano,CodChassi,PorteCarro,PorteMoto,IdVeiculo, Modelo, Marca")] ListaVeiculos listaVeiculo)
         {
+
+
             if (id != listaVeiculo.IdVeiculo)
             {
                 return NotFound();
             }
+           
 
             if (ModelState.IsValid)
             {
@@ -183,13 +206,16 @@ namespace OficinaWebMVC.Controllers
                     veiculo.Placa = listaVeiculo.Placa;
                     veiculo.Ano = listaVeiculo.Ano;
                     veiculo.CodChassi = listaVeiculo.CodChassi;
+                    veiculo.Marca = listaVeiculo.Marca;
+                    veiculo.Modelo = listaVeiculo.Modelo;
+
                     if (veiculo is Carro carro)
                     {
-                        carro.ModeloCarro = (ModeloCarro)listaVeiculo.ModeloCarro!;
+                        carro.PorteCarro = (PorteCarro)listaVeiculo.PorteCarro!;
                     }
                     if (veiculo is Moto moto)
                     {
-                        moto.ModeloMoto = (ModeloMoto)listaVeiculo.ModeloMoto!;
+                        moto.PorteMoto = (PorteMoto)listaVeiculo.PorteMoto!;
                     }
                     _context.Update(veiculo);
                     await _context.SaveChangesAsync();
@@ -230,8 +256,11 @@ namespace OficinaWebMVC.Controllers
                 CodChassi = veiculo.CodChassi,
                 IdVeiculo = veiculo.Id,
                 Placa = veiculo.Placa,
-                ModeloCarro = (veiculo as Carro)?.ModeloCarro,
-                ModeloMoto = (veiculo as Moto)?.ModeloMoto
+                PorteCarro = (veiculo as Carro)?.PorteCarro,
+                PorteMoto = (veiculo as Moto)?.PorteMoto,
+                Marca = veiculo.Marca,
+                Modelo = veiculo.Modelo
+                
             };
 
 

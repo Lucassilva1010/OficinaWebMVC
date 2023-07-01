@@ -32,26 +32,38 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CodChassi)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Marca)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Marca)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Modelo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Modelo)
+        </dd>
 
-        @if (Model.ModeloMoto is not null)
+        @if (Model.PorteMoto is not null)
         {
 
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ModeloMoto)
+                @Html.DisplayNameFor(model => model.PorteMoto)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ModeloMoto)
+                @Html.DisplayFor(model => model.PorteMoto)
             </dd>
         }
         
-        @if (Model.ModeloCarro is not null)
+        @if (Model.PorteCarro is not null)
         {
 
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ModeloCarro)
+                @Html.DisplayNameFor(model => model.PorteCarro)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ModeloCarro)
+                @Html.DisplayFor(model => model.PorteCarro)
             </dd>
         }
     </dl>

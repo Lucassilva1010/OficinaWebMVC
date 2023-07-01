@@ -8,6 +8,8 @@ public abstract class Veiculo:Entidade
     public string  CodChassi { get; set; }
    
     public Cliente Cliente { get; set; }
+    public string Marca { get; set; }
+    public string Modelo { get; set; }
 
 
 }

@@ -4,6 +4,6 @@ namespace OficinaWebMVC.Database.Entities;
 
 public class Moto:Veiculo
 {
-    public ModeloMoto  ModeloMoto { get; set; }
+    public PorteMoto  PorteMoto { get; set; }
 
 }
