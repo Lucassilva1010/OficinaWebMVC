@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OficinaWebMVC.Database.Contexto;
 
@@ -10,9 +11,11 @@ using OficinaWebMVC.Database.Contexto;
 namespace OficinaWebMVC.Migrations
 {
     [DbContext(typeof(OficinaDBContexto))]
-    partial class OficinaDBContextoModelSnapshot : ModelSnapshot
+    [Migration("20230805194754_Criacao_Entidade_Configuracao")]
+    partial class Criacao_Entidade_Configuracao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,14 +66,6 @@ namespace OficinaWebMVC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Configuracoes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("4cee6638-a6b0-48fb-be1e-5bed3d60b196"),
-                            NomeConfiguracao = "PrazoOrcamento",
-                            ValorConfiguracao = "10"
-                        });
                 });
 
             modelBuilder.Entity("OficinaWebMVC.Database.Entities.Orcamento", b =>

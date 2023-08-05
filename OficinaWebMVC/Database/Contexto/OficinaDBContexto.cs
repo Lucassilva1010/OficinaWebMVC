@@ -10,6 +10,8 @@ public class OficinaDBContexto:DbContext
     public DbSet<Moto> Motos { get; set; }
     public DbSet<Orcamento> Orcamentos { get; set; }
     public DbSet<Servico> Servicos { get; set; }
+    public DbSet<Configuracao> Configuracoes { get; set; }
+   
 
     public OficinaDBContexto(DbContextOptions<OficinaDBContexto>options):base(options)
     {
@@ -25,9 +27,12 @@ public class OficinaDBContexto:DbContext
         base.OnConfiguring(optionsBuilder); 
     }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Configuracao>().HasData(new Configuracao { Id = Guid.NewGuid(), NomeConfiguracao = "PrazoOrcamento", ValorConfiguracao = "10" });
         base.OnModelCreating(modelBuilder);
+
     }
 
     public DbSet<OficinaWebMVC.Database.Entities.Veiculo> Veiculo { get; set; } = default!;

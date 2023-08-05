@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using OficinaWebMVC.Database.Contexto;
+using OficinaWebMVC.Database.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,11 @@ builder.Services.AddDbContext<OficinaDBContexto>(options => {
 
 builder.Services.AddControllersWithViews();
 
+
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -37,6 +42,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+
 
 app.Run();
 

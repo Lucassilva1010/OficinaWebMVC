@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OficinaWebMVC.Database.Contexto;
 using OficinaWebMVC.Database.Entities;
+using OficinaWebMVC.Models;
 
 namespace OficinaWebMVC.Controllers
 {
@@ -22,8 +23,27 @@ namespace OficinaWebMVC.Controllers
         // GET: Orcamentos
         public async Task<IActionResult> Index()
         {
+            var orcamentos = await _context.Orcamentos.Include(o=> o.Cliente).Include(o=> o.Veiculo).ToListAsync();
+            List<OrcamentoModel> orcamentoModel = new List<OrcamentoModel>();
+
+            //var config = await _context.Configuracoes.FirstOrDefaultAsync(a => a.NomeConfiguracao == "PrazoOrcamento");
+           foreach (Orcamento o in orcamentos)
+            {
+                OrcamentoModel model = new()
+                {
+                    Id = o.Id,
+                    Cliente = o.Cliente,
+                    Veiculo = o.Veiculo,
+                    CpfResponsavel = o.CpfResponsavel,
+                    PrazoOrcamento = o.DataPrazoOrcamento,
+                    Responsavel = o.Responsavel,
+                    StatusOrcamento = o.StatusOrcamento,
+                    ValorTotal = o.ValorTotal,
+                };
+                orcamentoModel.Add(model);
+            }
               return _context.Orcamentos != null ? 
-                          View(await _context.Orcamentos.ToListAsync()) :
+                          View(orcamentoModel) :
                           Problem("Entity set 'OficinaDBContexto.Orcamentos'  is null.");
         }
 

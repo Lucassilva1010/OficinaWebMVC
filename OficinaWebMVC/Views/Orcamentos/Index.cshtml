@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OficinaWebMVC.Database.Entities.Orcamento>
+﻿@model IEnumerable<OficinaWebMVC.Models.OrcamentoModel>
 
 @{
     ViewData["Title"] = "Orcamento";
@@ -7,23 +7,19 @@
 <h1>Orçamento</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Novo Orçamento</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+
             <th>
-                @Html.DisplayNameFor(model => model.DataInicialOrcamento)
+                @Html.DisplayNameFor(model => model.Veiculo.Placa)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataAprovacaoCliente)
+                @Html.DisplayNameFor(model => model.Cliente.Nome)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataFinalOrcamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ValorTotal)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Responsavel)
             </th>
@@ -33,39 +29,48 @@
             <th>
                 @Html.DisplayNameFor(model => model.StatusOrcamento)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrazoOrcamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorTotal)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataInicialOrcamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataAprovacaoCliente)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFinalOrcamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValorTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Responsavel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CpfResponsavel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusOrcamento)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Veiculo.Placa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Responsavel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CpfResponsavel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusOrcamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrazoOrcamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorTotal)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
