@@ -1,6 +1,6 @@
 ﻿namespace OficinaWebMVC.Enums;
 
-public enum  ModeloMoto:int
+public enum  PorteMoto:int
 {
     Motor50 =1,
     Motor150 =2,
