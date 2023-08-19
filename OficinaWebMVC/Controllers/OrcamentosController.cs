@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,16 @@ namespace OficinaWebMVC.Controllers
                 OrcamentoModel model = new()
                 {
                     Id = o.Id,
-                    Cliente = o.Cliente,
-                    Veiculo = o.Veiculo,
+                    IdCliente = o.Cliente.Id,
+                    NomeCliente = o.Cliente.Nome,
+                    IdVeiculo =  o.Veiculo.Id,
+                    PlacaVeiculo = o.Veiculo.Placa,
                     CpfResponsavel = o.CpfResponsavel,
                     PrazoOrcamento = o.DataPrazoOrcamento,
                     Responsavel = o.Responsavel,
                     StatusOrcamento = o.StatusOrcamento,
                     ValorTotal = o.ValorTotal,
+
                 };
                 orcamentoModel.Add(model);
             }
@@ -55,6 +59,7 @@ namespace OficinaWebMVC.Controllers
                 return NotFound();
             }
 
+
             var orcamento = await _context.Orcamentos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (orcamento == null)
@@ -62,12 +67,36 @@ namespace OficinaWebMVC.Controllers
                 return NotFound();
             }
 
-            return View(orcamento);
+            OrcamentoModel orcamentoModel = new OrcamentoModel();
+            
+            orcamentoModel.StatusOrcamento = orcamento.StatusOrcamento;
+            orcamentoModel.Responsavel = orcamento.Responsavel;
+            orcamentoModel.CpfResponsavel = orcamento.CpfResponsavel;
+            orcamentoModel.PrazoOrcamento = orcamento.DataPrazoOrcamento;
+            orcamentoModel.ValorTotal = orcamento.ValorTotal;
+
+
+            orcamentoModel.Servicos = new List<ServicoModel>();
+
+            foreach (var item in orcamento.Servicos)
+            {
+                var servicoModel = new ServicoModel();
+                servicoModel.Descricao = item.Descricao;
+                servicoModel.Preco = item.Preco;
+                orcamentoModel.Servicos.Add(servicoModel);
+            }
+
+            return View(orcamentoModel);
         }
 
         // GET: Orcamentos/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var clientes = await _context.Clientes.ToListAsync();
+
+            ViewBag.Clientes = clientes.Select(c => new SelectListItem()
+            { Text = c.Nome, Value = c.Id.ToString() }).ToList();
+
             return View();
         }
 

@@ -1,4 +1,4 @@
-﻿@model OficinaWebMVC.Database.Entities.Orcamento
+﻿@model OficinaWebMVC.Models.OrcamentoModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,26 +12,8 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DataInicialOrcamento" class="control-label"></label>
-                <input asp-for="DataInicialOrcamento" class="form-control" />
-                <span asp-validation-for="DataInicialOrcamento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataAprovacaoCliente" class="control-label"></label>
-                <input asp-for="DataAprovacaoCliente" class="form-control" />
-                <span asp-validation-for="DataAprovacaoCliente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataFinalOrcamento" class="control-label"></label>
-                <input asp-for="DataFinalOrcamento" class="form-control" />
-                <span asp-validation-for="DataFinalOrcamento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValorTotal" class="control-label"></label>
-                <input asp-for="ValorTotal" class="form-control" />
-                <span asp-validation-for="ValorTotal" class="text-danger"></span>
-            </div>
+                                  
+           
             <div class="form-group">
                 <label asp-for="Responsavel" class="control-label"></label>
                 <input asp-for="Responsavel" class="form-control" />
@@ -43,10 +25,22 @@
                 <span asp-validation-for="CpfResponsavel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusOrcamento" class="control-label"></label>
-                <select asp-for="StatusOrcamento" class="form-control"></select>
-                <span asp-validation-for="StatusOrcamento" class="text-danger"></span>
+                <label asp-for="IdCliente" class="control-label"></label>
+                <select asp-for="IdCliente" id="ClientSelect"
+                        asp-items="@ViewBag.Clientes">
+                        <option value="" selected>Selcione</option>
+                    </select>
+                <span asp-validation-for="IdCliente" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="IdVeiculo" class="control-label"></label>
+                <select asp-for="IdVeiculo" id="VeiculoSelect">
+                    <option value="" selected>Selcione</option>
+                </select>
+                <span asp-validation-for="IdVeiculo" class="text-danger"></span>
+            </div>
+           
+           
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -58,6 +52,29 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        $(function() {
+            $('#ClientSelect').on('change',function() {
+                var ClientId = $(this).val();
+                console.log(ClientId)// obtém o valor selecionado
+                if (ClientId !== "") {
+                    $.getJSON('/Veiculos/ObterPorIdCliente?ClientId=' + ClientId,function(data){
+                        console.log(data);
+                    });
+                }
+            });
+        });
+
+
+    </script>
+
+    
+
 }

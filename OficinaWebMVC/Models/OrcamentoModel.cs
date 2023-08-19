@@ -6,9 +6,11 @@ namespace OficinaWebMVC.Models
     public class OrcamentoModel
     {
         public Guid Id { get; set; }
-        public Veiculo Veiculo { get; set; }
+        public Guid IdCliente { get; set; }
+        public string NomeCliente { get; set; }
+        public Guid IdVeiculo { get; set; }
+        public string PlacaVeiculo { get; set; }
         public decimal ValorTotal { get; set; }
-        public Cliente Cliente { get; set; }
         public string Responsavel { get; set; }
         public string CpfResponsavel { get; set; }
         public StatusOrcamento StatusOrcamento { get;  set; }

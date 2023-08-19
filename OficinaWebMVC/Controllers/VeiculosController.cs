@@ -48,6 +48,14 @@ namespace OficinaWebMVC.Controllers
 
 
         }
+        
+        
+        public async Task<IActionResult> ObterPorIdCliente(string ClientId)
+        {
+            var veiculos = await _context.Veiculo.Include(x => x.Cliente)
+                .Where(x => x.Cliente.Id.ToString() == ClientId).ToListAsync();
+            return new JsonResult(veiculos);
+        }
 
         // GET: Veiculos/Details/5
         public async Task<IActionResult> Details(Guid? id)
